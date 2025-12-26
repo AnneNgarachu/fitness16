@@ -1,64 +1,80 @@
+/**
+ * ReceptionHeader Component
+ * Location: src/components/reception/ReceptionHeader.tsx
+ */
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface ReceptionHeaderProps {
-  staffName: string;
-  location: string | null;
+  staffName?: string;
+  location?: string;
 }
 
 export function ReceptionHeader({ staffName, location }: ReceptionHeaderProps) {
   const router = useRouter();
-
-  const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/reception/login');
-  };
-
-  // Format today's date
-  const today = new Date();
-  const dateString = today.toLocaleDateString('en-KE', {
-    weekday: 'short',
+  
+  const today = new Date().toLocaleDateString('en-KE', {
+    weekday: 'long',
     day: 'numeric',
-    month: 'short',
+    month: 'long',
     year: 'numeric',
   });
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/reception/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
-    <header className="sticky top-0 bg-zinc-950 border-b border-zinc-800 px-6 py-4 z-50">
-      <div className="max-w-4xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-linear-to-br from-orange-500 to-pink-500 flex items-center justify-center font-black text-sm">
-            F16
-          </div>
-          <div>
-            <div className="font-bold text-lg">Fitness 16</div>
-            <div className="text-zinc-500 text-xs">
-              {location ? `${location.charAt(0).toUpperCase() + location.slice(1)} Reception` : 'Reception'}
+    <header className="sticky top-0 z-40 bg-black/90 backdrop-blur-lg border-b border-zinc-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+        <div className="flex items-center justify-between">
+          {/* Logo + Title */}
+          <div className="flex items-center gap-3">
+            <Image
+              src="/logo.png"
+              alt="Fitness 16"
+              width={44}
+              height={44}
+              className="rounded-xl"
+            />
+            <div>
+              <h1 className="font-bold text-lg">Fitness 16</h1>
+              <p className="text-xs text-zinc-500 capitalize">
+                {location ? `${location} Reception` : 'Reception'}
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* Today's Date - Center */}
-        <div className="hidden sm:block text-center">
-          <div className="text-zinc-400 text-sm">📅 {dateString}</div>
-        </div>
+          {/* Date - center on desktop */}
+          <div className="hidden md:block text-center">
+            <p className="text-sm text-zinc-400">📅 {today}</p>
+          </div>
 
-        <div className="flex items-center gap-3">
-          <span className="text-zinc-400 text-sm hidden sm:inline">{staffName}</span>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 rounded-xl font-bold text-sm bg-zinc-800 hover:bg-zinc-700 transition-colors"
-          >
-            Logout
-          </button>
+          {/* Staff name + Logout */}
+          <div className="flex items-center gap-3">
+            {staffName && (
+              <span className="text-sm text-zinc-400 hidden sm:inline">
+                {staffName}
+              </span>
+            )}
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-sm font-medium transition-colors"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-      </div>
-      
-      {/* Mobile: date and staff name below */}
-      <div className="sm:hidden flex justify-between mt-2 text-xs text-zinc-500">
-        <span>📅 {dateString}</span>
-        <span>{staffName}</span>
+        
+        {/* Date - mobile */}
+        <p className="md:hidden text-xs text-zinc-500 mt-2">📅 {today}</p>
       </div>
     </header>
   );

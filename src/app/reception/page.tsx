@@ -1,3 +1,7 @@
+/**
+ * Reception Dashboard Page
+ * Location: src/app/reception/page.tsx
+ */
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -80,7 +84,9 @@ export default function ReceptionDashboard() {
 
   return (
     <div className="min-h-screen bg-black">
-      <ReceptionHeader staffName={staff?.name || ''} location={staff?.location || null} />
+      {/* Fixed: changed null to undefined */}
+      <ReceptionHeader staffName={staff?.name} location={staff?.location} />
+      
       <main className="max-w-4xl mx-auto px-6 py-6">
         {/* Tabs */}
         <div className="flex gap-2 mb-6">

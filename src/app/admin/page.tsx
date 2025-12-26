@@ -1,3 +1,7 @@
+/**
+ * Admin Dashboard Page
+ * Location: src/app/admin/page.tsx
+ */
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -204,7 +208,8 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-black">
-      <AdminHeader onWalkInClick={() => setShowWalkInModal(true)} />
+      {/* AdminHeader now has Walk-in button built in */}
+      <AdminHeader />
 
       <nav className="border-b border-zinc-800 bg-zinc-950">
         <div className="max-w-7xl mx-auto flex gap-1 px-6 overflow-x-auto">

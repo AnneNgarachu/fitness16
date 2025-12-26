@@ -1,7 +1,12 @@
+/**
+ * Admin Login Page - Split Screen Design
+ * Location: src/app/admin/login/page.tsx
+ */
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -39,12 +44,10 @@ export default function AdminLoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        const errorMessage = typeof data.error === 'string' 
-          ? data.error 
-          : data.message || 'Failed to send OTP';
-        throw new Error(errorMessage);
+        throw new Error(typeof data.error === 'string' ? data.error : data.message || 'Failed to send OTP');
       }
 
+      if (data.dev_otp) setOtp(data.dev_otp);
       setStep('otp');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -74,10 +77,7 @@ export default function AdminLoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        const errorMessage = typeof data.error === 'string' 
-          ? data.error 
-          : data.message || 'Invalid OTP';
-        throw new Error(errorMessage);
+        throw new Error(typeof data.error === 'string' ? data.error : data.message || 'Invalid OTP');
       }
 
       router.push('/admin');
@@ -89,95 +89,170 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-orange-500 to-pink-500 flex items-center justify-center font-black text-xl mx-auto mb-4">
-            F16
+    <div className="min-h-screen bg-black flex">
+      {/* Left Side - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-orange-600 via-pink-600 to-purple-700 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-black/20 rounded-full blur-3xl" />
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 flex flex-col justify-center items-center w-full p-12 text-center">
+          <Image
+            src="/logo.png"
+            alt="Fitness 16"
+            width={120}
+            height={120}
+            className="rounded-3xl shadow-2xl mb-8"
+          />
+          <h1 className="text-5xl font-black text-white mb-4">Fitness 16</h1>
+          <p className="text-xl text-white/80 mb-8">Admin Dashboard</p>
+          
+          <div className="space-y-4 text-left max-w-sm">
+            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
+              <span className="text-3xl">📊</span>
+              <div>
+                <div className="font-semibold text-white">Real-time Analytics</div>
+                <div className="text-sm text-white/70">Track revenue & growth</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
+              <span className="text-3xl">👥</span>
+              <div>
+                <div className="font-semibold text-white">Member Management</div>
+                <div className="text-sm text-white/70">Full control over memberships</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
+              <span className="text-3xl">📍</span>
+              <div>
+                <div className="font-semibold text-white">Multi-Location</div>
+                <div className="text-sm text-white/70">Manage Juja & Ruaka</div>
+              </div>
+            </div>
           </div>
-          <h1 className="text-2xl font-black text-white">Admin Login</h1>
-          <p className="text-zinc-500 text-sm mt-1">Fitness 16 Dashboard</p>
         </div>
+      </div>
 
-        {/* Form */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-          {step === 'phone' ? (
-            <>
-              <div className="mb-4">
-                <label className="block text-zinc-400 text-xs mb-2">Phone Number</label>
-                <input
-                  type="tel"
-                  value={formatPhone(phone)}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="0712 345 678"
-                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-lg focus:outline-none focus:border-orange-500"
-                />
-              </div>
+      {/* Right Side - Login Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center mb-8">
+            <Image
+              src="/logo.png"
+              alt="Fitness 16"
+              width={80}
+              height={80}
+              className="mx-auto mb-4 rounded-2xl"
+            />
+            <h1 className="text-2xl font-black">Admin Login</h1>
+          </div>
 
-              {error && (
-                <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-4 text-sm">
-                  {error}
+          {/* Desktop Title */}
+          <div className="hidden lg:block mb-8">
+            <h2 className="text-3xl font-black text-white mb-2">Welcome Back</h2>
+            <p className="text-zinc-500">Sign in to access the admin dashboard</p>
+          </div>
+
+          {/* Form Card */}
+          <div className="bg-zinc-900/50 border border-zinc-800 rounded-3xl p-8">
+            {step === 'phone' ? (
+              <>
+                <div className="mb-6">
+                  <label className="block text-zinc-400 text-sm font-medium mb-2">
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500">🇰🇪</span>
+                    <input
+                      type="tel"
+                      value={formatPhone(phone)}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="0712 345 678"
+                      className="w-full pl-12 pr-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white text-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
+                    />
+                  </div>
                 </div>
-              )}
 
-              <button
-                onClick={handleSendOtp}
-                disabled={phone.replace(/\D/g, '').length < 9 || isLoading}
-                className="w-full py-3 rounded-xl font-bold text-white bg-linear-to-r from-orange-500 to-pink-500 disabled:opacity-50"
-              >
-                {isLoading ? 'Sending...' : 'Send OTP'}
-              </button>
-            </>
-          ) : (
-            <>
-              <div className="mb-2">
-                <label className="block text-zinc-400 text-xs mb-2">Enter OTP</label>
-                <input
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  placeholder="000000"
-                  maxLength={6}
-                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-2xl text-center tracking-widest focus:outline-none focus:border-orange-500"
-                />
-              </div>
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm flex items-center gap-2">
+                    <span>⚠️</span> {error}
+                  </div>
+                )}
 
-              <p className="text-zinc-500 text-xs text-center mb-4">
-                OTP sent to {formatPhone(phone)}
-              </p>
-
-              {error && (
-                <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-4 text-sm">
-                  {error}
+                <button
+                  onClick={handleSendOtp}
+                  disabled={phone.replace(/\D/g, '').length < 9 || isLoading}
+                  className="w-full py-4 rounded-xl font-bold text-white bg-linear-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Sending...
+                    </span>
+                  ) : (
+                    'Send OTP'
+                  )}
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="mb-4">
+                  <label className="block text-zinc-400 text-sm font-medium mb-2">
+                    Enter OTP Code
+                  </label>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    placeholder="000000"
+                    maxLength={6}
+                    className="w-full px-4 py-4 bg-zinc-800/50 border border-zinc-700 rounded-xl text-white text-3xl text-center tracking-[0.5em] focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
+                  />
                 </div>
-              )}
 
-              <button
-                onClick={handleVerifyOtp}
-                disabled={otp.length < 4 || isLoading}
-                className="w-full py-3 rounded-xl font-bold text-white bg-linear-to-r from-orange-500 to-pink-500 disabled:opacity-50 mb-3"
-              >
-                {isLoading ? 'Verifying...' : 'Verify & Login'}
-              </button>
+                <p className="text-zinc-500 text-sm text-center mb-6">
+                  Code sent to <span className="text-white">{formatPhone(phone)}</span>
+                </p>
 
-              <button
-                onClick={() => {
-                  setStep('phone');
-                  setOtp('');
-                  setError(null);
-                }}
-                className="w-full py-3 rounded-xl font-bold text-zinc-400 bg-zinc-800"
-              >
-                Change Number
-              </button>
-            </>
-          )}
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm flex items-center gap-2">
+                    <span>⚠️</span> {error}
+                  </div>
+                )}
+
+                <button
+                  onClick={handleVerifyOtp}
+                  disabled={otp.length < 4 || isLoading}
+                  className="w-full py-4 rounded-xl font-bold text-white bg-linear-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] mb-4"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Verifying...
+                    </span>
+                  ) : (
+                    'Verify & Login'
+                  )}
+                </button>
+
+                <button
+                  onClick={() => { setStep('phone'); setOtp(''); setError(null); }}
+                  className="w-full py-3 rounded-xl font-semibold text-zinc-400 bg-zinc-800/50 hover:bg-zinc-800 transition-colors"
+                >
+                  ← Change Number
+                </button>
+              </>
+            )}
+          </div>
+
+          <p className="text-center text-zinc-600 text-sm mt-6">
+            🔒 Staff access only. Contact admin for access.
+          </p>
         </div>
-
-        <p className="text-center text-zinc-600 text-xs mt-6">
-          Staff access only. Contact admin for access.
-        </p>
       </div>
     </div>
   );
