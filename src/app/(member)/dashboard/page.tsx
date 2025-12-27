@@ -63,7 +63,6 @@ export default function DashboardPage() {
     }
   }
 
-  // Format today's date
   const today = new Date()
   const dateString = today.toLocaleDateString('en-KE', {
     weekday: 'long',
@@ -83,7 +82,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-black text-white pb-24">
-      {/* Header */}
       <div className="p-5 flex items-center justify-between">
         <div>
           <p className="text-zinc-500 text-sm">{dateString}</p>
@@ -94,7 +92,6 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      {/* Membership Card */}
       <div className="px-5 mb-6">
         <div className="bg-linear-to-br from-orange-500 to-pink-500 rounded-2xl p-5">
           {membership ? (
@@ -117,17 +114,11 @@ export default function DashboardPage() {
                 </div>
               </div>
               {membership.days_remaining <= 7 ? (
-                <Link 
-                  href="/plans" 
-                  className="block w-full bg-white text-orange-500 text-center py-2 rounded-xl font-bold transition-colors"
-                >
+                <Link href="/plans" className="block w-full bg-white text-orange-500 text-center py-2 rounded-xl font-bold transition-colors">
                   ⚠️ Renew Now
                 </Link>
               ) : membership.days_remaining <= 14 ? (
-                <Link 
-                  href="/plans" 
-                  className="block w-full bg-white/20 hover:bg-white/30 text-center py-2 rounded-xl font-bold transition-colors"
-                >
+                <Link href="/plans" className="block w-full bg-white/20 hover:bg-white/30 text-center py-2 rounded-xl font-bold transition-colors">
                   Renew Membership
                 </Link>
               ) : null}
@@ -143,7 +134,24 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Weekly Progress */}
+      <div className="px-5 mb-6">
+        <h2 className="font-bold text-lg mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-3 gap-3">
+          <Link href="/workouts/new" className="bg-zinc-900 rounded-xl p-4 text-center hover:bg-zinc-800 transition-colors">
+            <div className="text-3xl mb-2">💪</div>
+            <p className="font-semibold text-sm">Log Workout</p>
+          </Link>
+          <Link href="/goals" className="bg-zinc-900 rounded-xl p-4 text-center hover:bg-zinc-800 transition-colors">
+            <div className="text-3xl mb-2">🎯</div>
+            <p className="font-semibold text-sm">My Goals</p>
+          </Link>
+          <Link href="/progress" className="bg-zinc-900 rounded-xl p-4 text-center hover:bg-zinc-800 transition-colors">
+            <div className="text-3xl mb-2">⚖️</div>
+            <p className="font-semibold text-sm">Log Weight</p>
+          </Link>
+        </div>
+      </div>
+
       <div className="px-5 mb-6">
         <div className="bg-zinc-900 rounded-2xl p-5">
           <div className="flex justify-between items-center mb-4">
@@ -169,26 +177,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Quick Actions - 3 items in a row */}
-      <div className="px-5 mb-6">
-        <h2 className="font-bold text-lg mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-3 gap-3">
-          <Link href="/workouts/new" className="bg-zinc-900 rounded-xl p-4 text-center hover:bg-zinc-800 transition-colors">
-            <div className="text-3xl mb-2">💪</div>
-            <p className="font-semibold text-sm">Log Workout</p>
-          </Link>
-          <Link href="/progress" className="bg-zinc-900 rounded-xl p-4 text-center hover:bg-zinc-800 transition-colors">
-            <div className="text-3xl mb-2">⚖️</div>
-            <p className="font-semibold text-sm">Log Weight</p>
-          </Link>
-          <Link href="/goals" className="bg-zinc-900 rounded-xl p-4 text-center hover:bg-zinc-800 transition-colors">
-            <div className="text-3xl mb-2">🎯</div>
-            <p className="font-semibold text-sm">My Goals</p>
-          </Link>
-        </div>
-      </div>
-
-      {/* Referral Card */}
       {member?.referral_code && (
         <div className="px-5">
           <div className="bg-zinc-900 rounded-2xl p-5">

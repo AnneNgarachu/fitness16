@@ -12,8 +12,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: '/dashboard', label: 'Home', icon: '🏠' },
   { href: '/workouts', label: 'Workouts', icon: '💪' },
-  { href: '/progress', label: 'Progress', icon: '📊' },
   { href: '/goals', label: 'Goals', icon: '🎯' },
+  { href: '/progress', label: 'Progress', icon: '📊' },
   { href: '/profile', label: 'Profile', icon: '👤' },
 ]
 
