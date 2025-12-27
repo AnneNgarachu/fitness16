@@ -64,6 +64,6 @@ export const POST = withErrorHandler(async (req: Request) => {
   return NextResponse.json({
     success: true,
     message: 'OTP sent successfully',
-    ...(process.env.NODE_ENV === 'development' && { dev_otp: code }),
+    dev_otp: code,  // REMOVE AFTER DEMO - returns OTP for auto-fill
   })
 })
